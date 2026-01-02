@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Pizza Hut | Contact</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- HEADER LOADED BY JS -->
+  <div id="header-placeholder"></div>
+
+  <main>
+    <section class="contact">
+      <div class="container">
+
+        <h2>Contact Us</h2>
+        <p>Have questions or feedback? We'd love to hear from you!</p>
+
+        <div class="contact-content">
+
+          <!-- CONTACT FORM -->
+          <form class="contact-form" onsubmit="return false;">
+            <input id="contact-name" type="text" placeholder="Your Name" required>
+            <input id="contact-email" type="email" placeholder="Your Email" required>
+            <textarea id="contact-message" placeholder="Your Message" rows="5" required></textarea>
+
+            <button id="contact-send" type="button">Send Message</button>
+          </form>
+
+          <!-- CONTACT DETAILS -->
+          <div class="contact-details">
+            <h3>Our Info</h3>
+
+            <p><strong>Address:</strong> 123 Pizza Street, Cityville</p>
+            <p><strong>Phone:</strong> +1 234 567 890</p>
+            <p><strong>Email:</strong> contact@pizzahut.com</p>
+
+            <p class="follow-links">
+              <strong>Follow Us:</strong>
+              <a href="https://facebook.com" target="_blank">Facebook</a> |
+              <a href="https://instagram.com" target="_blank">Instagram</a> |
+              <a href="https://twitter.com" target="_blank">Twitter</a>
+            </p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER LOADED BY JS -->
+  <div id="footer-placeholder"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>

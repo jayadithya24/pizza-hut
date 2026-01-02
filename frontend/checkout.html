@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | Pizza Hut</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+
+     /************************************
+      FIX GLOBAL CSS OVERRIDES
+      Isolates checkout page layout
+    ************************************/
+    main *, .checkout-container * {
+      box-sizing: border-box !important;
+    }
+
+    /* Force override any flex/grid issues */
+    main section, main div {
+      display: block !important;
+    }
+
+    /************************************
+      Checkout Container
+    ************************************/
+    .checkout-container {
+      max-width: 900px;
+      margin: auto;
+      margin-top: var(--header-height, 130px);
+      background: #1e1e1e;
+      padding: 30px;
+      border-radius: 15px;
+      color: white;
+    }
+
+    .checkout-title {
+      font-size: 2.3rem;
+      font-weight: bold;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #ff4436;
+    }
+
+    /************************************
+      Section Styling
+    ************************************/
+    .checkout-section {
+      margin-bottom: 25px;
+    }
+
+    .checkout-section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 12px;
+      color: #ff4436;
+    }
+
+    /************************************
+      Order Summary
+    ************************************/
+    .order-summary {
+      background: #252525;
+      padding: 15px;
+      border-radius: 10px;
+    }
+
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #444;
+      padding-bottom: 8px;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    /************************************
+      Delivery Inputs
+    ************************************/
+    .checkout-grid {
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 15px !important;
+    }
+
+    .checkout-input {
+      padding: 12px;
+      background: #2c2c2c;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      font-size: 1rem;
+      width: 100%;
+    }
+
+    /************************************
+      Payment Method Section
+    ************************************/
+    .payment-options label {
+      display: flex !important;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+      font-size: 1.1rem;
+      cursor: pointer;
+    }
+
+    .payment-options input {
+      transform: scale(1.3);
+    }
+
+    /************************************
+      Place Order Button
+    ************************************/
+    .place-order-btn {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.2rem;
+      border: none;
+      border-radius: 40px;
+      background: linear-gradient(to right, #ff4436, #ff6f3c);
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.25s;
+    }
+
+    .place-order-btn:hover {
+      transform: translateY(-3px);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Header -->
+  <div id="header-placeholder"></div>
+
+  <main>
+    <div class="checkout-container">
+
+      <h1 class="checkout-title">Checkout</h1>
+
+      <!-- Order Summary -->
+      <div class="checkout-section order-summary">
+        <h2>Order Summary</h2>
+        <div id="checkout-summary"></div>
+        <h3 id="checkout-total" style="text-align:right; margin-top:10px;"></h3>
+      </div>
+
+      <!-- Delivery Details -->
+      <div class="checkout-section">
+        <h2>Delivery Details</h2>
+
+        <div class="checkout-grid">
+          <input id="name" class="checkout-input" placeholder="Full Name">
+          <input id="phone" class="checkout-input" placeholder="Phone Number">
+          <input id="address" class="checkout-input" placeholder="Delivery Address">
+          <input id="pincode" class="checkout-input" placeholder="Pin Code">
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="checkout-section">
+        <h2>Payment Method</h2>
+
+        <div class="payment-options">
+          <label><input type="radio" name="payment" value="COD" checked> Cash on Delivery</label>
+          <label><input type="radio" name="payment" value="UPI"> UPI</label>
+          <label><input type="radio" name="payment" value="Card"> Credit / Debit Card</label>
+        </div>
+      </div>
+
+      <button class="place-order-btn" onclick="placeOrder()">Place Order</button>
+
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="script.js"></script>
+
+  <script>
+    /****************************************
+      Load Order Summary
+    *****************************************/
+    function loadCheckout() {
+      const cart = JSON.parse(localStorage.getItem("cart")) || [];
+      const list = document.getElementById("checkout-summary");
+      const totalBox = document.getElementById("checkout-total");
+
+      let total = 0;
+      list.innerHTML = "";
+
+      cart.forEach(item => {
+        list.innerHTML += `
+          <div class="order-item">
+            <span>${item.name} × ${item.quantity}</span>
+            <span>₹ ${item.price * item.quantity}</span>
+          </div>
+        `;
+        total += item.price * item.quantity;
+      });
+
+      totalBox.textContent = "Total: ₹ " + total;
+    }
+
+    loadCheckout();
+
+    /****************************************
+      Place Order — With Toast Notifications
+    *****************************************/
+    function placeOrder() {
+      const name = document.getElementById("name").value;
+      const phone = document.getElementById("phone").value;
+      const address = document.getElementById("address").value;
+      const pincode = document.getElementById("pincode").value;
+
+      // VALIDATION WITHOUT POPUP
+      if (!name || !phone || !address || !pincode) {
+        showToast("⚠️ Please fill in all delivery details!");
+        return;
+      }
+
+      // SUCCESS TOAST
+      showToast("🎉 Order Placed Successfully! 🍕 Your pizza is on the way!");
+
+      // Clear cart
+      localStorage.removeItem("cart");
+
+      // Redirect after 2 seconds
+      setTimeout(() => {
+        window.location.href = "success.html";
+      }, 2000);
+    }
+  </script>
+
+</body>
+</html>

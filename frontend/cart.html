@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Your Cart | Pizza Hut</title>
+
+  <!-- Sticky Header Spacing Fix -->
+  <style>
+    main {
+      margin-top: var(--header-height, 90px);
+    }
+  </style>
+
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Dynamic Header -->
+  <div id="header-placeholder"></div>
+
+  <!-- Cart Page Content -->
+  <main class="cart-page">
+    <div class="container">
+
+      <!-- Page Title -->
+      <h1 class="cart-title">Your Cart</h1>
+
+      <!-- Cart Items (Loaded by script.js) -->
+      <div id="cart-items" class="cart-items"></div>
+
+      <!-- Cart Summary -->
+      <div class="cart-summary">
+        <h2 id="total-price" class="total-price">Total: ₹ 0</h2>
+
+        <!-- Checkout Button -->
+        <button id="checkout-btn" class="checkout-btn" onclick="goToCheckout()">Proceed to Checkout</button>
+
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Dynamic Footer -->
+  <div id="footer-placeholder"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
