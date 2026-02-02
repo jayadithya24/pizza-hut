@@ -1,6 +1,8 @@
 // =======================================================
 // Reusable Header/Footer Loader
 // =======================================================
+const API_BASE_URL = "https://pizza-hut-1.onrender.com";
+
 async function includeHTML(selectorId, url) {
   try {
     const res = await fetch(url);
@@ -83,7 +85,9 @@ async function loadMenu() {
   container.innerHTML = "";
 
   try {
-    const res = await fetch("http://localhost:5000/api/pizzas");
+    const res = await fetch(`${API_BASE_URL}/api/pizzas`);
+
+
     if (!res.ok) throw new Error("Failed to fetch pizzas");
 
     const pizzas = await res.json();
