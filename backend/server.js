@@ -4,19 +4,26 @@ const connectDB = require("./config/db");
 require("dotenv").config();
 
 const app = express();
+
+// Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// Connect MongoDB
+// Connect to MongoDB
 connectDB();
 
-// Default route
+// Health check / default route
 app.get("/", (req, res) => {
-  res.send("Pizza backend is working!");
+  res.status(200).send("🍕 Pizza backend is working!");
 });
 
-// Pizza API routes
+// API routes
 app.use("/api/pizzas", require("./routes/pizzaRoutes"));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// IMPORTANT: use Render-provided PORT
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+  console.log(`✅ Server running on port ${PORT}`);
+});
