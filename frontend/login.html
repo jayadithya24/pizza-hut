@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pizza Hut | Login</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="login-page">
+  <div id="header-placeholder"></div>
+
+  <main>
+    <section class="auth-page">
+      <div class="auth-shell">
+        <div class="auth-copy">
+          <span class="auth-pill">Pizza Hut account access</span>
+          <h1>Sign in to reorder faster and track every craving.</h1>
+          <p>
+            Access your saved addresses, repeat your favourite pizzas, and keep an eye on
+            your delivery or pickup order from one simple place.
+          </p>
+
+          <div class="auth-feature-grid">
+            <article class="auth-feature">
+              <h3>Fast Reorder</h3>
+              <p>Jump back to your favourite pizza in seconds.</p>
+            </article>
+            <article class="auth-feature">
+              <h3>Track Order</h3>
+              <p>Check the status of your delivery or pickup anytime.</p>
+            </article>
+            <article class="auth-feature">
+              <h3>Save Details</h3>
+              <p>Store your address and payment info for quicker checkout.</p>
+            </article>
+          </div>
+        </div>
+
+        <div class="auth-card">
+          <div class="auth-card-head">
+            <p class="auth-card-kicker">Pizza Hut account</p>
+            <h2 id="auth-title">Welcome back, pizza lover</h2>
+          </div>
+
+          <div class="auth-tabbar" aria-label="Authentication type">
+            <button class="auth-tab active" type="button" data-auth-tab="login">Login</button>
+            <button class="auth-tab" type="button" data-auth-tab="register">Register</button>
+          </div>
+
+          <div class="auth-panel" data-auth-panel="login">
+            <form id="login-form" class="auth-form" novalidate>
+              <label for="login-email">Email Address</label>
+              <input id="login-email" type="email" placeholder="you@example.com" required>
+
+              <label for="login-password">Password</label>
+              <input id="login-password" type="password" placeholder="Enter your password" required>
+
+              <button type="submit" class="auth-btn">Sign In</button>
+            </form>
+
+            <p class="auth-switch">New to Pizza Hut? <a href="#register" data-auth-tab-link="register">Create an account</a></p>
+          </div>
+
+          <div class="auth-panel" data-auth-panel="register" hidden>
+            <form id="register-form" class="auth-form" novalidate>
+              <label for="register-name">Full Name</label>
+              <input id="register-name" type="text" placeholder="Your full name" required>
+
+              <label for="register-email">Email</label>
+              <input id="register-email" type="email" placeholder="you@example.com" required>
+
+              <label for="register-password">Password</label>
+              <input id="register-password" type="password" placeholder="At least 6 characters" required>
+
+              <label for="register-confirm-password">Confirm Password</label>
+              <input id="register-confirm-password" type="password" placeholder="Re-enter password" required>
+
+              <button type="submit" class="auth-btn">Register</button>
+            </form>
+
+            <p class="auth-switch">Already have an account? <a href="#login" data-auth-tab-link="login">Login here</a></p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

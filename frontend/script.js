@@ -42,6 +42,8 @@ async function loadIncludes() {
   await includeHTML("header-placeholder", "includes/header.html");
   await includeHTML("footer-placeholder", "includes/footer.html");
 
+  setupAuthUI();
+
   const header =
     document.querySelector("#header-placeholder header") ||
     document.querySelector("header");
@@ -318,14 +320,222 @@ function initContactForm() {
 }
 
 // =======================================================
+// AUTH HANDLERS (LocalStorage)
+// =======================================================
+function getUsers() {
+  return JSON.parse(localStorage.getItem("users")) || [];
+}
+
+function saveUsers(users) {
+  localStorage.setItem("users", JSON.stringify(users));
+}
+
+function setActiveUser(user) {
+  localStorage.setItem("activeUser", JSON.stringify(user));
+}
+
+function clearActiveUser() {
+  localStorage.removeItem("activeUser");
+}
+
+function getActiveUser() {
+  return JSON.parse(localStorage.getItem("activeUser") || "null");
+}
+
+function getCurrentPageName() {
+  const path = window.location.pathname || "";
+  const page = path.split("/").pop();
+  return (page || "index.html").toLowerCase();
+}
+
+function enforceAuthRouting() {
+  const currentPage = getCurrentPageName();
+  const activeUser = getActiveUser();
+  const isAuthPage = currentPage === "login.html" || currentPage === "register.html";
+
+  if (!activeUser && !isAuthPage) {
+    window.location.replace("login.html");
+    return true;
+  }
+
+  if (activeUser && isAuthPage) {
+    window.location.replace("index.html");
+    return true;
+  }
+
+  return false;
+}
+
+function setupAuthUI() {
+  const activeUser = getActiveUser();
+  const currentPage = getCurrentPageName();
+  const isAuthPage = currentPage === "login.html" || currentPage === "register.html";
+  const logoutBtn = document.getElementById("logout-btn");
+  const navLinksContainer = document.querySelector(".nav-links");
+  const headerActions = document.querySelector(".header-actions");
+  const hamburger = document.getElementById("hamburger");
+
+  if (isAuthPage) {
+    if (navLinksContainer) navLinksContainer.style.display = "none";
+    if (headerActions) headerActions.style.display = "none";
+    if (hamburger) hamburger.style.display = "none";
+    return;
+  }
+
+  if (activeUser) {
+    if (logoutBtn) {
+      logoutBtn.style.display = "inline-flex";
+      logoutBtn.addEventListener("click", () => {
+        clearActiveUser();
+        showToast("Logged out successfully.");
+
+        setTimeout(() => {
+          window.location.href = "login.html";
+        }, 400);
+      });
+    }
+
+    return;
+  }
+
+  if (logoutBtn) logoutBtn.style.display = "none";
+}
+
+function setupAuthTabs() {
+  const panels = document.querySelectorAll("[data-auth-panel]");
+  const tabs = document.querySelectorAll("[data-auth-tab]");
+  const authTitle = document.getElementById("auth-title");
+  if (!panels.length || !tabs.length) return;
+
+  const showPanel = (mode) => {
+    const activeMode = mode === "register" ? "register" : "login";
+
+    panels.forEach((panel) => {
+      panel.hidden = panel.dataset.authPanel !== activeMode;
+    });
+
+    tabs.forEach((tab) => {
+      tab.classList.toggle("active", tab.dataset.authTab === activeMode);
+    });
+
+    if (authTitle) {
+      authTitle.textContent = activeMode === "register"
+        ? "Create your Pizza Hut account"
+        : "Welcome back, pizza lover";
+    }
+  };
+
+  showPanel(window.location.hash === "#register" ? "register" : "login");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      const mode = tab.dataset.authTab === "register" ? "register" : "login";
+      window.location.hash = mode === "register" ? "#register" : "#login";
+      showPanel(mode);
+    });
+  });
+
+  window.addEventListener("hashchange", () => {
+    showPanel(window.location.hash === "#register" ? "register" : "login");
+  });
+}
+
+function initRegisterForm() {
+  const form = document.getElementById("register-form");
+  if (!form) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const name = document.getElementById("register-name").value.trim();
+    const email = document.getElementById("register-email").value.trim().toLowerCase();
+    const password = document.getElementById("register-password").value;
+    const confirmPassword = document.getElementById("register-confirm-password").value;
+
+    if (!name || !email || !password || !confirmPassword) {
+      showToast("Please fill all fields.");
+      return;
+    }
+
+    if (!email.includes("@")) {
+      showToast("Enter a valid email.");
+      return;
+    }
+
+    if (password.length < 6) {
+      showToast("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      showToast("Passwords do not match.");
+      return;
+    }
+
+    const users = getUsers();
+    const exists = users.some((user) => user.email === email);
+
+    if (exists) {
+      showToast("This email is already registered.");
+      return;
+    }
+
+    users.push({ name, email, password });
+    saveUsers(users);
+    showToast("Registration successful. Please login.");
+
+    setTimeout(() => {
+      window.location.hash = "#login";
+    }, 1200);
+  });
+}
+
+function initLoginForm() {
+  const form = document.getElementById("login-form");
+  if (!form) return;
+
+  form.addEventListener("submit", (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById("login-email").value.trim().toLowerCase();
+    const password = document.getElementById("login-password").value;
+
+    if (!email || !password) {
+      showToast("Please enter email and password.");
+      return;
+    }
+
+    const users = getUsers();
+    const matchedUser = users.find((user) => user.email === email && user.password === password);
+
+    if (!matchedUser) {
+      showToast("Invalid email or password.");
+      return;
+    }
+
+    setActiveUser({ name: matchedUser.name, email: matchedUser.email });
+    showToast("Login successful.");
+
+    setTimeout(() => {
+      window.location.href = "index.html";
+    }, 1000);
+  });
+}
+
+// =======================================================
 // Page Initializer
 // =======================================================
 async function initPage() {
+  if (enforceAuthRouting()) return;
+
   await loadIncludes();
 
   if (document.getElementById("menu-cards")) loadMenu();
   if (document.getElementById("cart-items")) loadCartPage();
   if (document.getElementById("contact-send")) initContactForm();
+  if (document.getElementById("login-form")) initLoginForm();
+  if (document.getElementById("register-form")) initRegisterForm();
+  if (getCurrentPageName() === "login.html") setupAuthTabs();
 
   updateCheckoutButton();
   requestAnimationFrame(setHeaderHeightVar);
