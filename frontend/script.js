@@ -2,6 +2,7 @@
 // =======================================================
 // Early Login Check to Prevent FOUC
 // =======================================================
+
 (function() {
   // Simple login check (customize as needed)
   const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
@@ -10,8 +11,10 @@
     window.location.replace('/login.html');
     return;
   }
-  // Reveal body only after login check
-  document.body.style.display = '';
+  // Only reveal body if NOT on login page (login page handles its own FOUC)
+  if (!isLoginPage) {
+    document.body.style.display = '';
+  }
 })();
 
 // =======================================================

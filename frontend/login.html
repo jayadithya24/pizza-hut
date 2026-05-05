@@ -7,6 +7,10 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="login-page" style="display:none;">
+  <style>
+    /* Hide header/footer placeholders until page is loaded */
+    #header-placeholder, #footer-placeholder { display: none; }
+  </style>
   <div id="header-placeholder"></div>
 
   <main>
@@ -86,9 +90,12 @@
   </main>
 
   <script>
-    // Prevent FOUC: Only show body after page is loaded
+    // Prevent FOUC: Only show body and header/footer after page is loaded
     window.addEventListener('DOMContentLoaded', function() {
       document.body.style.display = '';
+      document.getElementById('header-placeholder').style.display = '';
+      var footer = document.getElementById('footer-placeholder');
+      if (footer) footer.style.display = '';
     });
   </script>
   <script src="script.js"></script>
