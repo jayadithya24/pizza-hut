@@ -6,7 +6,7 @@
   <title>Pizza Hut | Login</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="login-page">
+<body class="login-page" style="display:none;">
   <div id="header-placeholder"></div>
 
   <main>
@@ -85,6 +85,12 @@
     </section>
   </main>
 
+  <script>
+    // Prevent FOUC: Only show body after page is loaded
+    window.addEventListener('DOMContentLoaded', function() {
+      document.body.style.display = '';
+    });
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
