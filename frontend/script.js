@@ -533,11 +533,21 @@ function initLoginForm() {
     }
 
     setActiveUser({ name: matchedUser.name, email: matchedUser.email });
+    // Debug: Log active user and localStorage
+    console.log("[DEBUG] Login successful. activeUser:", getActiveUser());
+    console.log("[DEBUG] localStorage:", JSON.stringify(localStorage));
     showToast("Login successful.");
 
+    // Robust redirect: try both setTimeout and immediate redirect
     setTimeout(() => {
       window.location.href = "index.html";
     }, 1000);
+    // Fallback: also try immediate redirect
+    setTimeout(() => {
+      if (window.location.pathname.endsWith("login.html")) {
+        window.location.replace("index.html");
+      }
+    }, 1500);
   });
 }
 
