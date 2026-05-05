@@ -1,3 +1,19 @@
+
+// =======================================================
+// Early Login Check to Prevent FOUC
+// =======================================================
+(function() {
+  // Simple login check (customize as needed)
+  const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+  const isLoginPage = window.location.pathname.endsWith('/login.html');
+  if (!isLoggedIn && !isLoginPage) {
+    window.location.replace('/login.html');
+    return;
+  }
+  // Reveal body only after login check
+  document.body.style.display = '';
+})();
+
 // =======================================================
 // Reusable Header/Footer Loader
 // =======================================================
