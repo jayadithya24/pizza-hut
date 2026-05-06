@@ -13,6 +13,11 @@ app.use(express.urlencoded({ extended: true }));
 // Connect to MongoDB
 connectDB();
 
+
+// Serve static files from the frontend directory
+const path = require("path");
+app.use(express.static(path.join(__dirname, "../frontend")));
+
 // Health check / default route
 app.get("/", (req, res) => {
   res.status(200).send("🍕 Pizza backend is working!");

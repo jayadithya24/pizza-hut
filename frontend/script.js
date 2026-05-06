@@ -1,11 +1,10 @@
-
 // =======================================================
 // Early Login Check to Prevent FOUC
 // =======================================================
 
 (function() {
-  // Simple login check (customize as needed)
-  const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+  // Use only activeUser for login check
+  const isLoggedIn = !!localStorage.getItem('activeUser');
   const isLoginPage = window.location.pathname.endsWith('/login.html');
   if (!isLoggedIn && !isLoginPage) {
     window.location.replace('/login.html');
@@ -372,6 +371,7 @@ function enforceAuthRouting() {
   const activeUser = getActiveUser();
   const isAuthPage = currentPage === "login.html" || currentPage === "register.html";
 
+
   if (!activeUser && !isAuthPage) {
     window.location.replace("login.html");
     return true;
@@ -406,6 +406,7 @@ function setupAuthUI() {
       logoutBtn.style.display = "inline-flex";
       logoutBtn.addEventListener("click", () => {
         clearActiveUser();
+        // localStorage.removeItem('loggedIn'); // No longer needed
         showToast("Logged out successfully.");
 
         setTimeout(() => {
@@ -533,21 +534,33 @@ function initLoginForm() {
     }
 
     setActiveUser({ name: matchedUser.name, email: matchedUser.email });
+    // localStorage.setItem('loggedIn', 'true'); // No longer needed
     // Debug: Log active user and localStorage
     console.log("[DEBUG] Login successful. activeUser:", getActiveUser());
     console.log("[DEBUG] localStorage:", JSON.stringify(localStorage));
     showToast("Login successful.");
 
+    // Debug: Log before redirect
+    console.log("[DEBUG] Attempting redirect to index.html");
+
     // Robust redirect: try both setTimeout and immediate redirect
     setTimeout(() => {
+      console.log("[DEBUG] setTimeout 1000ms: redirecting to index.html");
       window.location.href = "index.html";
     }, 1000);
     // Fallback: also try immediate redirect
     setTimeout(() => {
       if (window.location.pathname.endsWith("login.html")) {
+        console.log("[DEBUG] setTimeout 1500ms: still on login.html, using window.location.replace");
         window.location.replace("index.html");
       }
     }, 1500);
+    // Immediate fallback
+    setTimeout(() => {
+      if (window.location.pathname.endsWith("login.html")) {
+        alert("[DEBUG] Still on login.html after 2s. Redirect failed. Check console for errors.");
+      }
+    }, 2000);
   });
 }
 
