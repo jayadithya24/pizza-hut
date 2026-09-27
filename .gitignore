@@ -1,6 +1,11 @@
 # node modules
 node_modules/
 
+# Cypress
+cypress/videos/
+cypress/screenshots/
+cypress/downloads/
+
 # env files
 .env
 

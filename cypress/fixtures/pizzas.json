@@ -1,0 +1,23 @@
+[
+  {
+    "_id": "pizza-1",
+    "name": "Margherita",
+    "price": 199,
+    "description": "Classic delight with mozzarella cheese & basil",
+    "image": "images/pizza-margherita.jpg"
+  },
+  {
+    "_id": "pizza-2",
+    "name": "Veggie Supreme",
+    "price": 299,
+    "description": "Loaded with onions, capsicum, mushrooms, olives & jalapenos",
+    "image": "images/pizza-veggiesupreme.jpg"
+  },
+  {
+    "_id": "pizza-3",
+    "name": "Paneer Tikka",
+    "price": 329,
+    "description": "Spicy paneer tikka with onions & capsicum",
+    "image": "images/pizza-paneertikka.jpg"
+  }
+]
