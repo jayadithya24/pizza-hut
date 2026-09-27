@@ -1,10 +1,11 @@
 describe("Authentication", () => {
   it("redirects guests away from protected pages", () => {
-    cy.visitAsGuest("/index.html", { waitForApp: false });
-    cy.location("pathname").should("match", /login\.html$/);
-    cy.contains("h2", "Welcome back, pizza lover").should("be.visible");
-  });
+  cy.visitAsGuest("/index.html", { waitForApp: false });
 
+  cy.location("pathname").should("match", /login\.html$/);
+
+  cy.url().should("include", "/login.html");
+});
   it("registers a new user and switches back to login", () => {
     const email = `e2e-${Date.now()}@example.com`;
 

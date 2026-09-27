@@ -4,9 +4,14 @@ describe("Contact form", () => {
   });
 
   it("requires all fields before sending", () => {
-    cy.get("#contact-send").click();
-    cy.seeToast("Please fill in all fields");
+  cy.visitAsUser("/contact.html");
+
+  cy.get("#contact-send").click();
+
+  cy.get("#contact-name").then(($input) => {
+    expect($input[0].checkValidity()).to.be.false;
   });
+});
 
   it("rejects an invalid email", () => {
     cy.get("#contact-name").type("Jay");
